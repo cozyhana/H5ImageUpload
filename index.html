@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<style>
+    #fileImage{width: 300px;height: 300px; margin: 20px auto;background-repeat:  no-repeat ;background-position:  left top;background-size: contain; }
+    #fileInfo{border: 1px solid #eee;}
+</style>
+<body>
+<div id="fileImage"></div>
+<input type="file" value="upload" id="fileInput">
+<p id="fileInfo"></p>
+</body>
+<script>
+    var fileInput = document.getElementById("fileInput"),
+        fileImage = document.getElementById("fileImage"),
+        fileInfo = document.getElementById("fileInfo");
+
+    //监听change事件
+    fileInput.addEventListener('change',function(){
+        //清空预览区背景图片
+        fileImage.style.backgroundImage = '';
+        //检查文件是否选择
+        if(!fileInput.value){
+            fileInfo.innerHTML = "没有选择任何文件";
+            return;
+        }
+
+        //获取file的引用
+        var file = fileInput.files[0];
+
+        //获取file信息
+        fileInfo.innerHTML = '文件'+file.name+'<br>'+
+            '大小'+file.size+'<br>'+
+            '修改'+file.lastModifiedDate+'<br>';
+        if(file.type !== 'image/jpeg' && file.type !== 'image/png' && file.type !== 'image/gif'){
+            alert('不是有效的图片');
+            return;
+        }
+
+        //读取文件
+        var reader = new FileReader();
+        reader.onload = function(e){
+            var data = e.target.result;
+            fileImage.style.backgroundImage = 'url('+data+')';
+        }
+        // 以DataURL的形式读取文件:
+        reader.readAsDataURL(file);
+    });
+</script>
+</html>
